@@ -23,11 +23,11 @@ module Gtk
 # @is_global_undo         : ポスト履歴を遡るときにundoとredoを識別
 
     @@hist_limit = 8000
-    @@control_targetkey = ['A', 'space', 'g', 'f', 'b', 'n', 'p', 'a',
-                   'e', 'd', 'h', 'w', 'k', 'y', 't', 'slash', 'z']
-    @@control_unselectkey = ['g', 'd', 'h', 'w', 'k', 'y', 't', 'slash', 'z']
-    @@mod1_targetkey = ['f', 'b', 'a', 'e', 'w', 'd', 'h', 'n', 'p']
-    @@mod1_unselectkey = ['w', 'd', 'h', 'n', 'p']
+    @@control_targetkey = ['A', 'space', 'g', 's', 'h', 'n', 't', 'a',
+                   'e', 'd', 'b', 'w', 'k', 'y', 'p', 'slash', 'z']
+    @@control_unselectkey = ['g', 'd', 'b', 'w', 'k', 'y', 'p', 'slash', 'z']
+    @@mod1_targetkey = ['s', 'h', 'a', 'e', 'w', 'd', 'b', 'n', 't']
+    @@mod1_unselectkey = ['w', 'd', 'b', 'n', 't']
 
     @@post_history = []
     @@post_history_ptr = 0
@@ -202,9 +202,9 @@ module Gtk
           end
 
           case key
-          when 'f'
+          when 's'
             self.move_cursor(Gtk::MOVEMENT_WORDS, 1, @select)
-          when 'b'
+          when 'h'
             self.move_cursor(Gtk::MOVEMENT_WORDS, -1, @select) 
           when 'a'
             self.move_cursor(Gtk::MOVEMENT_BUFFER_ENDS, -1, @select )
@@ -212,14 +212,14 @@ module Gtk
             self.move_cursor(Gtk::MOVEMENT_BUFFER_ENDS, 1, @select )
           when 'd'
             delete_from_cursor(Gtk::DELETE_WORD_ENDS, 1)
-          when 'h'
+          when 'b'
             delete_from_cursor(Gtk::DELETE_WORD_ENDS, -1)
           when 'w'
             self.copy_clipboard
             self.select_all(false)
           when 'n'
             redoGlobalStack
-          when 'p'
+          when 't'
             undoGlobalStack
           end
           
@@ -251,13 +251,13 @@ module Gtk
             end
           when 'g' # 選択解除
             self.select_all(false)
-          when 'f' # 右に移動
+          when 's' # 右に移動
             self.move_cursor(Gtk::MOVEMENT_VISUAL_POSITIONS, 1, @select)
-          when 'b' # 左に移動
+          when 'h' # 左に移動
             self.move_cursor(Gtk::MOVEMENT_VISUAL_POSITIONS, -1, @select)
           when 'n' # 次の行に移動
             self.move_cursor(Gtk::MOVEMENT_DISPLAY_LINES, 1, @select)
-          when 'p' # 前の行に移動
+          when 't' # 前の行に移動
             self.move_cursor(Gtk::MOVEMENT_DISPLAY_LINES, -1, @select)
           when 'a' # 行頭へ移動
             self.move_cursor(Gtk::MOVEMENT_PARAGRAPH_ENDS, -1, @select)
@@ -265,7 +265,7 @@ module Gtk
             self.move_cursor(Gtk::MOVEMENT_PARAGRAPH_ENDS, 1, @select)
           when 'd' # Deleteの挙動
             self.delete_from_cursor(Gtk::DELETE_CHARS, 1)
-          when 'h' # BackSpaceの挙動
+          when 'b' # BackSpaceの挙動
             self.delete_from_cursor(Gtk::DELETE_CHARS, -1)
           when 'w' # カット
             self.cut_clipboard
@@ -278,7 +278,7 @@ module Gtk
             end
           when 'y' # 現在位置に貼り付け
             self.paste_clipboard
-          when 't'
+          when 'p'
             self.move_cursor(Gtk::MOVEMENT_VISUAL_POSITIONS, -1, false) if self.buffer.cursor_position == self.buffer.text.size
             offset = self.buffer.cursor_position
             start_iter = self.buffer.get_iter_at_offset(offset-1)
