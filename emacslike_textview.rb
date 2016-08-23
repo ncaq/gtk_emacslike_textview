@@ -5,26 +5,26 @@ require 'gtksourceview2'
 module Gtk
   class EmacsLikeTextView < Gtk::SourceView
 
-# @@hist_limit            : 履歴スタックの最大保存数
-# @@control_targetkey     : Ctrlで装飾してEmacsっぽいキーバインドにするキー．
-#                           元から割り当てられていた機能は呼ばない．
-# @@control_unselectkey   : 選択トグルを自動的にOFFにするキー
-# @@post_history          : ポスト履歴を保存するグローバルスタック
-# @@post_history_ptr      : ポスト履歴のスタックポインタ
-# @default_basecolor      : デフォルトの背景色
-# @default_fgcolor        : デフォルトの文字色
-# @alternate_basecolor    : 文字数が閾値を上回った場合に設定する背景色
-# @alternate_fgcolor      : 文字数が閾値を上回った場合に設定する文字色
-# @color_change_count     : 背景色を変更する文字数の閾値．nilに設定すると背景色を変更しない
-# @select                 : 選択トグルのON/OFFを格納
-# @history_stack          : 履歴スタック
-# @stack_ptr              : 履歴スタックポインタ
-# @isundo                 : undoによる変更かどうかの確認
-# @is_global_undo         : ポスト履歴を遡るときにundoとredoを識別
+    # @@hist_limit            : 履歴スタックの最大保存数
+    # @@control_targetkey     : Ctrlで装飾してEmacsっぽいキーバインドにするキー．
+    #                           元から割り当てられていた機能は呼ばない．
+    # @@control_unselectkey   : 選択トグルを自動的にOFFにするキー
+    # @@post_history          : ポスト履歴を保存するグローバルスタック
+    # @@post_history_ptr      : ポスト履歴のスタックポインタ
+    # @default_basecolor      : デフォルトの背景色
+    # @default_fgcolor        : デフォルトの文字色
+    # @alternate_basecolor    : 文字数が閾値を上回った場合に設定する背景色
+    # @alternate_fgcolor      : 文字数が閾値を上回った場合に設定する文字色
+    # @color_change_count     : 背景色を変更する文字数の閾値．nilに設定すると背景色を変更しない
+    # @select                 : 選択トグルのON/OFFを格納
+    # @history_stack          : 履歴スタック
+    # @stack_ptr              : 履歴スタックポインタ
+    # @isundo                 : undoによる変更かどうかの確認
+    # @is_global_undo         : ポスト履歴を遡るときにundoとredoを識別
 
     @@hist_limit = 8000
     @@control_targetkey = ['A', 'space', 'g', 's', 'h', 'n', 't', 'a',
-                   'e', 'd', 'b', 'w', 'k', 'y', 'p', 'slash', 'z']
+                           'e', 'd', 'b', 'w', 'k', 'y', 'p', 'slash', 'z']
     @@control_unselectkey = ['g', 'd', 'b', 'w', 'k', 'y', 'p', 'slash', 'z']
     @@mod1_targetkey = ['s', 'h', 'a', 'e', 'w', 'd', 'b', 'n', 't']
     @@mod1_unselectkey = ['w', 'd', 'b', 'n', 't']
@@ -46,7 +46,7 @@ module Gtk
         end
 
         if UserConfig[:etv_change_background_color]
-        # 文字数に応じて背景色を変更
+          # 文字数に応じて背景色を変更
           if get_color_change_count != nil
             if self.buffer.text.length > get_color_change_count
               self.modify_base(Gtk::STATE_NORMAL, self.alternate_basecolor)
@@ -116,7 +116,7 @@ module Gtk
               insert_text = completion.sub('$0', '')
               self.buffer.insert_at_cursor(insert_text)
               self.move_cursor(Gtk::MOVEMENT_VISUAL_POSITIONS, -1 * insert_text[auto_pos..-1].size, @select)
-              
+
             else
               self.buffer.insert_at_cursor(completion)
             end
@@ -155,8 +155,8 @@ module Gtk
       # キーバインドの追加
       self.signal_connect('key_press_event') { |w, e|
         if Gdk::Window::ModifierType::CONTROL_MASK ==
-            e.state & Gdk::Window::CONTROL_MASK and
-            Gdk::Keyval.to_name(e.keyval) == 'slash' then
+           e.state & Gdk::Window::CONTROL_MASK and
+          Gdk::Keyval.to_name(e.keyval) == 'slash' then
           @isundo = true
         else
           @isundo = false
@@ -164,12 +164,12 @@ module Gtk
 
         # Tabフォーカスをフック
         if Gdk::Window::ModifierType::SHIFT_MASK ==
-            e.state & Gdk::Window::SHIFT_MASK and
-            Gdk::Keyval.to_name(e.keyval) == 'ISO_Left_Tab'
+           e.state & Gdk::Window::SHIFT_MASK and
+          Gdk::Keyval.to_name(e.keyval) == 'ISO_Left_Tab'
           @select = false
           if UserConfig[:shortcutkey_keybinds].select{ |key, bind|
-              bind[:slug] == :expand_snippet and bind[:key] == 'Shift + ISO_Left_Tab'
-            } != {}
+               bind[:slug] == :expand_snippet and bind[:key] == 'Shift + ISO_Left_Tab'
+             } != {}
             unless expand_snippet
               move_focus(Gtk::DIR_TAB_BACKWARD)
             end
@@ -181,8 +181,8 @@ module Gtk
         elsif Gdk::Keyval.to_name(e.keyval) == 'Tab'
           @select = false
           if UserConfig[:shortcutkey_keybinds].select{ |key, bind|
-              bind[:slug] == :expand_snippet and bind[:key] == 'Tab'
-            } != {}
+               bind[:slug] == :expand_snippet and bind[:key] == 'Tab'
+             } != {}
             unless expand_snippet
               move_focus(Gtk::DIR_TAB_FORWARD)
             end
@@ -193,7 +193,7 @@ module Gtk
 
         # Mod1 による装飾
         elsif Gdk::Window::ModifierType::MOD1_MASK ==
-            e.state & Gdk::Window::MOD1_MASK then
+              e.state & Gdk::Window::MOD1_MASK then
           key = Gdk::Keyval.to_name(e.keyval)
 
           # 選択トグルの解除
@@ -205,7 +205,7 @@ module Gtk
           when 's'
             self.move_cursor(Gtk::MOVEMENT_WORDS, 1, @select)
           when 'h'
-            self.move_cursor(Gtk::MOVEMENT_WORDS, -1, @select) 
+            self.move_cursor(Gtk::MOVEMENT_WORDS, -1, @select)
           when 'a'
             self.move_cursor(Gtk::MOVEMENT_BUFFER_ENDS, -1, @select )
           when 'e'
@@ -222,7 +222,7 @@ module Gtk
           when 't'
             undoGlobalStack
           end
-          
+
           # Emacsっぽいキーバインドとして実行したら，もとから割り当てられていた機能は呼ばない
           if @@mod1_targetkey.select{|k| k == key}.length > 0 then
             true
@@ -232,7 +232,7 @@ module Gtk
 
         # Control による装飾
         elsif Gdk::Window::ModifierType::CONTROL_MASK ==
-            e.state & Gdk::Window::CONTROL_MASK then
+              e.state & Gdk::Window::CONTROL_MASK then
           key = Gdk::Keyval.to_name(e.keyval)
 
           # 選択トグルの解除
