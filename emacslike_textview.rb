@@ -24,7 +24,7 @@ module Gtk
 
     @@hist_limit = 8000
     @@control_targetkey = ['A', 'space', 'g', 's', 'h', 'n', 't', 'a',
-                           'e', 'd', 'b', 'w', 'k', 'y', 'p', 'slash', 'z']
+                           'e', 'm', 'd', 'b', 'w', 'k', 'y', 'p', 'slash', 'z']
     @@control_unselectkey = ['g', 'd', 'b', 'w', 'k', 'y', 'p', 'slash', 'z']
     @@mod1_targetkey = ['s', 'h', 'a', 'e', 'w', 'd', 'b', 'n', 't']
     @@mod1_unselectkey = ['w', 'd', 'b', 'n', 't']
@@ -263,6 +263,8 @@ module Gtk
             self.move_cursor(Gtk::MOVEMENT_PARAGRAPH_ENDS, -1, @select)
           when 'e' # 行末へ移動
             self.move_cursor(Gtk::MOVEMENT_PARAGRAPH_ENDS, 1, @select)
+          when 'm' # 改行
+            self.insert_at_cursor("\n")
           when 'd' # Deleteの挙動
             self.delete_from_cursor(Gtk::DELETE_CHARS, 1)
           when 'b' # BackSpaceの挙動
