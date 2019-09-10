@@ -6,10 +6,10 @@ Plugin.create :gtk_emacslike_textview do
   UserConfig[:etv_default_foreground_color] ||= [0x0000, 0x0000, 0x0000]
   UserConfig[:etv_alternate_background_color] ||= [0xffff, 0xbbbb, 0xbbbb]
   UserConfig[:etv_alternate_foreground_color] ||= [0x0000, 0x0000, 0x0000]
-  UserConfig[:etv_change_background_color] ||= true
+  UserConfig[:etv_change_background_color] ||= false
 
   on_before_postbox_post do |text|
-    Gtk::EmacsLikeTextView.pushGlobalStack(text) 
+    Gtk::EmacsLikeTextView.pushGlobalStack(text)
   end
 
   command(:expand_snippet,
@@ -39,4 +39,3 @@ Plugin.create :gtk_emacslike_textview do
   end
 
 end
-
